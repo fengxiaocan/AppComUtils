@@ -10,12 +10,14 @@ import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
+import android.os.Environment;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import java.io.DataOutputStream;
+import java.io.File;
 import java.util.List;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
@@ -27,7 +29,9 @@ public class AppUtils {
 
     /**
      * 获取唯一标识imei
+     *
      * @param context
+     *
      * @return
      */
     public static String getImei(Context context) {
@@ -99,8 +103,7 @@ public class AppUtils {
     public static void shutdown() {
 
         try {
-            Process proc = Runtime.getRuntime().exec(new String[]{"su",
-                                                                  "-c",
+            Process proc = Runtime.getRuntime().exec(new String[]{"su", "-c",
                                                                   "reboot -p"});  //关机
             proc.waitFor();
         } catch (Exception e) {
@@ -113,8 +116,7 @@ public class AppUtils {
      */
     public static void reboot() {
         try {
-            Process proc = Runtime.getRuntime().exec(new String[]{"su",
-                                                                  "-c",
+            Process proc = Runtime.getRuntime().exec(new String[]{"su", "-c",
                                                                   "reboot "});  //关机
             proc.waitFor();
         } catch (Exception ex) {
@@ -163,8 +165,6 @@ public class AppUtils {
     /**
      * [获取应用程序版本名称信息]
      *
-     * @param context
-     *
      * @return 当前应用的版本名称
      */
     public static String getVersionName(Context context) {
@@ -177,6 +177,23 @@ public class AppUtils {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * 获取应用程序版本号
+     *
+     * @return 当前应用的版本号
+     */
+    public static int getVersionCode(Context context) {
+        try {
+            PackageManager packageManager = context.getPackageManager();
+            PackageInfo    packageInfo    = packageManager.getPackageInfo(context.getPackageName(), 0);
+            return packageInfo.versionCode;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
 
@@ -254,7 +271,8 @@ public class AppUtils {
     public static boolean isWifi(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo         activeNetInfo       = connectivityManager.getActiveNetworkInfo();
-        if (activeNetInfo != null && activeNetInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+        if (activeNetInfo != null &&
+            activeNetInfo.getType() == ConnectivityManager.TYPE_WIFI) {
             return true;
         }
         return false;
@@ -289,6 +307,106 @@ public class AppUtils {
                 mWm.setWifiEnabled(false);
             }
         }
+    }
+
+    /**
+     * 判断sd卡是否存在
+     */
+    public static boolean sdCardExist() {
+        return Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED); //判断sd卡是否存在
+    }
+
+    /**
+     * 获取sd卡根目录
+     */
+    public static File getSdRoot() {
+        File sdDir = Environment.getExternalStorageDirectory();//获取根目录
+        return sdDir;
+    }
+
+    /**
+     * 获取保存目录
+     */
+    public static File getSaveDir(Context context, String name) {
+        File saveDir;
+        if (sdCardExist()) {
+            saveDir = new File(Environment.getDataDirectory(),
+                    context.getPackageName() + "/" + name);//获取根目录
+        } else {
+            saveDir = new File(context.getFilesDir(), name);
+        }
+        if (!saveDir.exists()) {
+            saveDir.mkdirs();
+        }
+        return saveDir;
+    }
+
+    /**
+     * 获取保存目录
+     */
+    public static File getSdSaveDir(String name) {
+        if (sdCardExist()) {
+            File saveDir = new File(getSdRoot(), name);
+            if (!saveDir.exists()) {
+                saveDir.mkdirs();
+            }
+            return saveDir;
+        }
+        throw new NullPointerException("SD卡不存在");
+    }
+
+    /**
+     * 统计文件夹大小
+     */
+    private static long getDirLength(File dir) {
+        if (dir == null) {
+            return 0;
+        }
+        if (dir.isFile()) {
+            return dir.length();
+        }
+
+        File[] files = dir.listFiles();
+        if (files == null) {
+            return 0;
+        }
+        long cacheLength = 0;
+        for (File file : files) {
+            if (file.isFile()) {
+                cacheLength += file.length();
+            } else {
+                cacheLength += getDirLength(file);
+            }
+        }
+        return cacheLength;
+    }
+
+
+    /**
+     * 遍历删除文件夹下的所有内容
+     */
+    private static void deleteDir(File dir) {
+        if (dir == null) {
+            return;
+        }
+        if (dir.isFile()) {
+            dir.delete();
+            return;
+        }
+
+        File[] files = dir.listFiles();
+        if (files == null) {
+            return;
+        }
+        for (File file : files) {
+            if (file.isFile()) {
+                file.delete();
+            } else {
+                deleteDir(file);
+                file.delete();
+            }
+        }
+        dir.delete();
     }
 
 }

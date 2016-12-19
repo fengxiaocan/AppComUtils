@@ -30,7 +30,7 @@ public class StringUtils {
     }
 
     /** 使用字符缓冲区来拼接字符串 */
-    public static String joint(String... s) {
+    public static String join(String... s) {
         StringBuffer sb = new StringBuffer();
         for (String s1 : s) {
             sb.append(s1);
@@ -40,8 +40,6 @@ public class StringUtils {
 
     /**
      * 格式化数字数量
-     *
-     * @return
      */
     public static String formatNumber(long num) {
         if (num >= 0 && num < 10000) {

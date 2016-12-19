@@ -19,8 +19,8 @@ public class TestUtils {
      * 打印日志
      */
     public static void log(String msg) {
-        if (msg == null){
-            msg="null";
+        if (msg == null) {
+            msg = "null";
         }
         Log.e("evil-test", msg);
     }
@@ -37,35 +37,39 @@ public class TestUtils {
 
     /**
      * 上传文件
+     *
      * @param filePath
      */
-    public static void updataFile(String filePath) {
+    public static void updataFile(String filePath, String ip, int port) {
         File file = new File(filePath);
-        updataFile(file);
+        updataFile(file, ip, port);
     }
+
     /**
-     * 上传文件
-     * @param file
+     * 上传调试文件
      */
-    public static void updataFile(File file) {
-        new Thread(new UpdataRunnable(file)).start();
+    public static void updataFile(File file, String ip, int port) {
+        new Thread(new UpdataRunnable(file, ip, port)).start();
     }
 
     public static class UpdataRunnable implements Runnable {
-        private File mFile;
+        private File   mFile;
+        private String ip;
+        private int    port;
 
-        public UpdataRunnable(File file) {
+        public UpdataRunnable(File file, String ip, int port) {
             mFile = file;
+            this.ip = ip;
+            this.port = port;
         }
 
         @Override
         public void run() {
             if (mFile == null || !mFile.exists()) {
-                TestUtils.log("文件不存在");
                 return;
             }
             try {
-                Socket          socket = new Socket("192.168.1.254", 58888);
+                Socket          socket = new Socket(ip, port);
                 OutputStream    os     = socket.getOutputStream();
                 byte[]          arr    = new byte[(int) mFile.length()];
                 FileInputStream fis    = new FileInputStream(mFile);
@@ -80,7 +84,7 @@ public class TestUtils {
         }
     }
 
-    public interface CallBack{
+    public interface CallBack {
         void mothod();
     }
 }

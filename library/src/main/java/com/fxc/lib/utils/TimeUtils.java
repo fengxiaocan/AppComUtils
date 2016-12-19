@@ -142,9 +142,11 @@ public class TimeUtils {
         Date     da2  = new Date(date2);
         cal2.setTime(da2);
 
-        boolean isSameYear  = cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR);
-        boolean isSameMonth = isSameYear && cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH);
-        boolean isSameDate  = isSameMonth && cal1.get(Calendar.DAY_OF_MONTH) == cal2.get(Calendar.DAY_OF_MONTH);
+        boolean isSameYear = cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR);
+        boolean isSameMonth = isSameYear && cal1.get(Calendar.MONTH) ==
+                                            cal2.get(Calendar.MONTH);
+        boolean isSameDate = isSameMonth && cal1.get(Calendar.DAY_OF_MONTH) ==
+                                            cal2.get(Calendar.DAY_OF_MONTH);
 
         return isSameDate;
     }
@@ -337,7 +339,7 @@ public class TimeUtils {
      */
     public static String formatTimeStatu(long time, String type) {
         long timeMillis = System.currentTimeMillis();
-        long dTime      = timeMillis / 1000 - time;
+        long dTime      = timeMillis - time;
 
         if (dTime <= 0) {
             return "刚刚";
@@ -358,17 +360,25 @@ public class TimeUtils {
         if (dTime >= 0 && dTime <= 24) {
             return dTime + "小时前";
         }
+        dTime = dTime / 24;
 
-        return formatTime(time * 1000, type);
+        if (dTime > 0 && dTime <= 7) {
+            return dTime + "天前";
+        }
+        dTime = dTime / 7;
+        if (dTime > 0 && dTime <= 4) {
+            return dTime + "周前";
+        }
+
+        return formatTime(time, type);
     }
 
     /**
      * 获取月日: 11.11
      */
     public static String getMonthDate(long time) {
-        long     t        = time * 1000;
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(t);
+        calendar.setTimeInMillis(time);
         int month = calendar.get(Calendar.MONTH) + 1;  //获取月;
         int date  = calendar.get(Calendar.DATE);   //获取天;
         return month + "." + date;
@@ -413,12 +423,10 @@ public class TimeUtils {
 
     /**
      * 获取时长
-     *
-     * @return
      */
     public static String getTimeDuration(long time) {
         if (time <= 0) {
-            return "未投放";
+            return "0秒";
         }
 
         long dTime = time / 1000;

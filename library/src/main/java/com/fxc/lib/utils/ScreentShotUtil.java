@@ -8,6 +8,7 @@ import android.graphics.Matrix;
 import android.os.Build;
 import android.os.Environment;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.Surface;
 import android.view.WindowManager;
@@ -55,8 +56,8 @@ public class ScreentShotUtil {
     }
 
     private Bitmap screenShot(int width, int height) {
-        Class<?> surfaceClass = null;
-        Method   method       = null;
+        Class<?> surfaceClass ;
+        Method   method       ;
         try {
             if (android.os.Build.VERSION.SDK_INT >=
                 android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
@@ -69,7 +70,7 @@ public class ScreentShotUtil {
             method.setAccessible(true);
             return (Bitmap) method.invoke(null, width, height);
         } catch (Exception e) {
-            TestUtils.log(e.toString());
+            e.printStackTrace();
         }
         return null;
     }
@@ -138,9 +139,9 @@ public class ScreentShotUtil {
                     }
 
                     if (mScreenBitmap == null) {
-                        TestUtils.log("截屏失败");
+                        Log.e("screen", "截屏失败");
                     }
-                    mScreenBitmap.setHasAlpha(false);
+                   mScreenBitmap.setHasAlpha(false);
                     mScreenBitmap.prepareToDraw();
 
                     saveBitmap2File(mScreenBitmap, filePath);

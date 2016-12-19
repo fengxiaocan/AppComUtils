@@ -14,11 +14,16 @@ import java.io.OutputStream;
 public class FileUtils {
     /**
      * 复制文件
-     * @param copy
-     * @param goal
+     *
+     * @param copy 要复制的文件
+     * @param goal 目标文件
      */
     public static void copy(File copy, File goal) {
         try {
+            File file = goal.getParentFile();
+            if (file != null) {
+                file.mkdirs();
+            }
             FileInputStream  is = new FileInputStream(copy);
             FileOutputStream os = new FileOutputStream(goal);
             copy(is, os);
@@ -29,8 +34,9 @@ public class FileUtils {
 
     /**
      * 复制文件
-     * @param is
-     * @param os
+     *
+     * @param is 文件流
+     * @param os 目标流
      */
     public static void copy(InputStream is, OutputStream os) {
         try {
@@ -58,6 +64,9 @@ public class FileUtils {
         return file.getAbsolutePath();
     }
 
+    /**
+     * 关流
+     */
     public static void close(Closeable clo) {
         if (clo != null) {
             try {
@@ -70,8 +79,6 @@ public class FileUtils {
 
     /**
      * 统计文件大小,包括文件和文件夹
-     *
-     * @return
      */
     public static long getFileSize(File file) {
         if (file == null) {
