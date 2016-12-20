@@ -1,10 +1,19 @@
 package com.fxc.lib.utils;
 
+import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextUtils;
+import android.text.style.CharacterStyle;
+import android.text.style.ForegroundColorSpan;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.text.Collator;
+import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -203,5 +212,222 @@ public class StringUtils {
         Comparator<Object> com = Collator.getInstance(java.util.Locale.CHINA);
         Collections.sort(list, com);
         return list;
+    }
+
+
+    /**
+     * 把字符串加密
+     *
+     * @param code 要加密的信息
+     *
+     * @return 还原后的信息
+     */
+    public static String encode(String code) {
+        int    seed  = 111; // 加密密码
+        byte[] bytes = code.getBytes();
+        for (int i = 0; i < bytes.length; i++) {
+            bytes[i] ^= seed;
+        }
+        String string = new String(bytes);
+        return string;
+    }
+
+    /**
+     * 解密加密的字符串
+     *
+     * @param code 要加密的信息
+     *
+     * @return 还原后的信息
+     */
+    public static String decode(String code) {
+        return encode(code);
+    }
+
+    /**
+     * 把字符串加密
+     *
+     * @param code 要加密的信息
+     * @param seed 加密的密码
+     *
+     * @return 还原后的信息
+     */
+    public static String encode(String code, int seed) {
+        // 加密密码
+        byte[] bytes = code.getBytes();
+        for (int i = 0; i < bytes.length; i++) {
+            bytes[i] ^= seed;
+        }
+        String string = new String(bytes);
+        return string;
+    }
+
+    /**
+     * 解密加密的字符串
+     *
+     * @param code 要加密的信息
+     * @param seed 解密的密码
+     *
+     * @return 还原后的信息
+     */
+    public static String decode(String code, int seed) {
+        return encode(code, seed);
+    }
+
+
+    /**
+     * 返回一个高亮spannable
+     *
+     * @param content 文本内容
+     * @param color   高亮颜色
+     * @param start   起始位置
+     * @param end     结束位置
+     *
+     * @return 高亮spannable
+     */
+    public static CharSequence getHighLightText(String content, int color, int start, int end) {
+        if (TextUtils.isEmpty(content)) {
+            return "";
+        }
+        start = start >= 0 ? start : 0;
+        end = end <= content.length() ? end : content.length();
+        SpannableString spannable = new SpannableString(content);
+        CharacterStyle  span      = new ForegroundColorSpan(color);
+        spannable.setSpan(span, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return spannable;
+    }
+
+    /**
+     * 获取链接样式的字符串，即字符串下面有下划线
+     *
+     * @param txt 文本
+     *
+     * @return 返回链接样式的字符串
+     */
+    public static Spanned getHtmlStyleString(String txt) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<a href=\"\"><u><b>").append(txt).append(" </b></u></a>");
+        return Html.fromHtml(sb.toString());
+    }
+
+    /**
+     * 格式化文件大小，不保留末尾的0
+     *
+     * @param len 大小
+     *
+     * @return
+     */
+    public static String formatFileSize(long len) {
+        return formatFileSize(len, false);
+    }
+
+    /**
+     * 格式化文件大小，保留末尾的0，达到长度一致
+     *
+     * @param len      大小
+     * @param keepZero 是否保留小数点
+     *
+     * @return
+     */
+    public static String formatFileSize(long len, boolean keepZero) {
+        String        size;
+        DecimalFormat formatKeepTwoZero = new DecimalFormat("#.00");
+        DecimalFormat formatKeepOneZero = new DecimalFormat("#.0");
+        if (len < 1024) {
+            size = String.valueOf(len + "B");
+        } else if (len < 10 * 1024) {
+            // [0, 10KB)，保留两位小数
+            size = String.valueOf(len * 100 / 1024 / (float) 100) + "KB";
+        } else if (len < 100 * 1024) {
+            // [10KB, 100KB)，保留一位小数
+            size = String.valueOf(len * 10 / 1024 / (float) 10) + "KB";
+        } else if (len < 1024 * 1024) {
+            // [100KB, 1MB)，个位四舍五入
+            size = String.valueOf(len / 1024) + "KB";
+        } else if (len < 10 * 1024 * 1024) {
+            // [1MB, 10MB)，保留两位小数
+            if (keepZero) {
+                size = String.valueOf(formatKeepTwoZero.format(
+                        len * 100 / 1024 / 1024 / (float) 100)) + "MB";
+            } else {
+                size = String.valueOf(len * 100 / 1024 / 1024 / (float) 100) +
+                       "MB";
+            }
+        } else if (len < 100 * 1024 * 1024) {
+            // [10MB, 100MB)，保留一位小数
+            if (keepZero) {
+                size = String.valueOf(formatKeepOneZero.format(
+                        len * 10 / 1024 / 1024 / (float) 10)) + "MB";
+            } else {
+                size = String.valueOf(len * 10 / 1024 / 1024 / (float) 10) +
+                       "MB";
+            }
+        } else if (len < 1024 * 1024 * 1024) {
+            // [100MB, 1GB)，个位四舍五入
+            size = String.valueOf(len / 1024 / 1024) + "MB";
+        } else {
+            // [1GB, ...)，保留两位小数
+            size = String.valueOf(
+                    len * 100 / 1024 / 1024 / 1024 / (float) 100) + "GB";
+        }
+        return size;
+    }
+
+    /**
+     * 获取double的后几位小数
+     *
+     * @param num      double值
+     * @param decimals 保留几位小数
+     *
+     * @return 保留后的字符串
+     */
+    public static String getDoubleTwoDecimals(double num, int decimals) {
+        String numStr = String.valueOf(num);
+        int    last   = numStr.lastIndexOf("\\.");
+        int    i      = last + decimals;
+        if (i < numStr.length()) {
+            numStr.substring(0, i);
+        } else if (i == numStr.length()) {
+            return numStr;
+        } else {
+            for (int j = 0; j < i - numStr.length(); j++) {
+                numStr += "0";
+            }
+        }
+        return numStr;
+    }
+
+
+    /**
+     * 格式化音乐时间: 120 000 --> 02:00
+     *
+     * @param time
+     *
+     * @return
+     */
+    public static String formatMusicTime(long time) {
+        time = time / 1000;
+        String formatTime;
+        if (time < 10) {
+            formatTime = "00:0" + time;
+            return formatTime;
+        } else if (time < 60) {
+            formatTime = "00:" + time;
+            return formatTime;
+        } else {
+            long i = time / 60;
+            if (i < 10) {
+                formatTime = "0" + i + ":";
+            } else {
+                formatTime = i + ":";
+            }
+            long j = time % 60;
+            if (j < 10) {
+                formatTime += "0" + j;
+            } else {
+                formatTime += j;
+            }
+
+            return formatTime;
+        }
     }
 }

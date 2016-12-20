@@ -1,9 +1,11 @@
 package com.fxc.lib.utils;
 
+import java.io.BufferedWriter;
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -13,22 +15,41 @@ import java.io.OutputStream;
  */
 public class FileUtils {
     /**
+     * 创建文件夹
+     */
+    public static void mkdir(File dir) {
+        if (dir != null && !dir.exists()) {
+            dir.mkdirs();
+        }
+    }
+
+    /**
+     * 创建父类文件夹
+     */
+    public static void mkParentDir(File file) {
+        if (file != null) {
+            File parentFile = file.getParentFile();
+            mkdir(parentFile);
+        }
+    }
+
+    /**
      * 复制文件
      *
      * @param copy 要复制的文件
      * @param goal 目标文件
      */
     public static void copy(File copy, File goal) {
+        FileInputStream  is = null;
+        FileOutputStream os = null;
         try {
-            File file = goal.getParentFile();
-            if (file != null) {
-                file.mkdirs();
-            }
-            FileInputStream  is = new FileInputStream(copy);
-            FileOutputStream os = new FileOutputStream(goal);
-            copy(is, os);
+            mkParentDir(goal);
+            is = new FileInputStream(copy);
+            os = new FileOutputStream(goal);
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            copy(is, os);
         }
     }
 
@@ -45,10 +66,11 @@ public class FileUtils {
             while ((len = is.read(arr)) != -1) {
                 os.write(arr, 0, len);
             }
-            close(os);
-            close(is);
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            close(os);
+            close(is);
         }
     }
 
@@ -97,6 +119,86 @@ public class FileUtils {
                 }
             }
             return length;
+        }
+    }
+
+
+    /**
+     * 统计文件夹大小
+     */
+    private static long getDirLength(File dir) {
+        if (dir == null) {
+            return 0;
+        }
+        if (dir.isFile()) {
+            return dir.length();
+        }
+
+        File[] files = dir.listFiles();
+        if (files == null) {
+            return 0;
+        }
+        long cacheLength = 0;
+        for (File file : files) {
+            if (file.isFile()) {
+                cacheLength += file.length();
+            } else {
+                cacheLength += getDirLength(file);
+            }
+        }
+        return cacheLength;
+    }
+
+
+    /**
+     * 遍历删除文件夹下的所有内容
+     */
+    private static void deleteDir(File dir) {
+        if (dir == null) {
+            return;
+        }
+        if (dir.isFile()) {
+            dir.delete();
+            return;
+        }
+
+        File[] files = dir.listFiles();
+        if (files == null) {
+            return;
+        }
+        for (File file : files) {
+            if (file.isFile()) {
+                file.delete();
+            } else {
+                deleteDir(file);
+                file.delete();
+            }
+        }
+        dir.delete();
+    }
+
+
+    /**
+     * 把字符串写入文件中
+     *
+     * @param text   文本
+     * @param path   文件路径
+     * @param append 是否为添加
+     */
+    public static void writeFile(String text, String path, boolean append) {
+        if (StringUtils.isEmpty(text)) {
+            return;
+        }
+        File file = new File(path);
+        mkParentDir(file);
+        BufferedWriter writer = null;
+        try {
+            writer = new BufferedWriter(new FileWriter(file, append));
+            writer.write(text);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close(writer);
         }
     }
 }

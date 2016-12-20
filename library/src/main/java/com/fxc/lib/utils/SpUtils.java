@@ -26,6 +26,7 @@ public class SpUtils {
         edit.putString(key, value);
         // 提交数据
         edit.commit();
+        sp = null;
     }
 
     /**
@@ -44,6 +45,7 @@ public class SpUtils {
         }
         // 提交数据
         edit.commit();
+        sp = null;
     }
 
     /**
@@ -52,6 +54,7 @@ public class SpUtils {
     public static String getInfo(Context context, String key, String defValue) {
         SharedPreferences sp    = getSharedP(context);
         String            value = sp.getString(key, defValue);
+        sp = null;
         return value;
     }
 
@@ -66,6 +69,7 @@ public class SpUtils {
         edit.putBoolean(key, value);
         // 提交数据
         edit.commit();
+        sp = null;
     }
 
     /**
@@ -74,6 +78,7 @@ public class SpUtils {
     public static boolean getInfo(Context context, String key, boolean defValue) {
         SharedPreferences sp    = getSharedP(context);
         boolean           value = sp.getBoolean(key, defValue);
+        sp = null;
         return value;
     }
 
@@ -88,6 +93,7 @@ public class SpUtils {
         edit.putInt(key, value);
         // 提交数据
         edit.commit();
+        sp = null;
     }
 
     /**
@@ -96,6 +102,7 @@ public class SpUtils {
     public static int getInfo(Context context, String key, int defValue) {
         SharedPreferences sp    = getSharedP(context);
         int               value = sp.getInt(key, defValue);
+        sp = null;
         return value;
     }
 }

@@ -4,6 +4,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 
 /**
  * 时间工具类
@@ -448,5 +450,143 @@ public class TimeUtils {
         dTime = dTime / 24;
         long dHour = dTime % 24;
         return dTime + "天" + dHour + "小时";
+    }
+
+    /**
+     * 提取一个月中的最后一天
+     */
+    public static Date getLastDate(long day) {
+        Date date           = new Date();
+        long date_3_hm      = date.getTime() - 3600000 * 34 * day;
+        Date date_3_hm_date = new Date(date_3_hm);
+        return date_3_hm_date;
+    }
+
+
+    /**
+     * 判断是否润年
+     *
+     * @param ddate
+     *
+     * @return
+     */
+    public static boolean isLeapYear(String ddate, String type) throws ParseException {
+
+        /**
+         * 详细设计： 1.被400整除是闰年，否则： 2.不能被4整除则不是闰年 3.能被4整除同时不能被100整除则是闰年
+         * 3.能被4整除同时能被100整除则不是闰年
+         */
+        Date              d  = strToDate(ddate, type);
+        GregorianCalendar gc = (GregorianCalendar) Calendar.getInstance();
+        gc.setTime(d);
+        int year = gc.get(Calendar.YEAR);
+        if ((year % 400) == 0) {
+            return true;
+        } else if ((year % 4) == 0) {
+            if ((year % 100) == 0) {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            return false;
+        }
+    }
+
+
+    /**
+     * 获取一个月的最后一天
+     *
+     * @param dat  时间
+     * @param type 格式类型
+     *
+     * @return
+     */
+    public static String getLastDayOfMonth(String dat, String type) throws ParseException {
+        String str   = dat.substring(0, 8);
+        String month = dat.substring(5, 7);
+        int    mon   = Integer.parseInt(month);
+        if (mon == 1 || mon == 3 || mon == 5 || mon == 7 || mon == 8 ||
+            mon == 10 || mon == 12) {
+            str += "31";
+        } else if (mon == 4 || mon == 6 || mon == 9 || mon == 11) {
+            str += "30";
+        } else {
+            if (isLeapYear(dat, type)) {
+                str += "29";
+            } else {
+                str += "28";
+            }
+        }
+        return str;
+    }
+
+
+    /**
+     * 产生周序列,即得到当前时间所在的年度是第几周
+     *
+     * @return
+     */
+    public static String getSeqWeek() {
+        Calendar c    = Calendar.getInstance(Locale.CHINA);
+        String   week = Integer.toString(c.get(Calendar.WEEK_OF_YEAR));
+        if (week.length() == 1) {
+            week = "0" + week;
+        }
+        String year = Integer.toString(c.get(Calendar.YEAR));
+        return year + week;
+    }
+
+
+    /**
+     * 获取字符串日期是星期几
+     *
+     * @param sdate 2015年2月23日
+     *
+     * @return 返回是星期几的字符串
+     */
+    public static String getWeekStr(String sdate, String type) throws ParseException {
+        Date   date = strToDate(sdate, type);
+        int    week = date.getDay();
+        String str  = "";
+        if (week == 0) {
+            str = "星期日";
+        } else if (week == 1) {
+            str = "星期一";
+        } else if (week == 2) {
+            str = "星期二";
+        } else if (week == 3) {
+            str = "星期三";
+        } else if (week == 4) {
+            str = "星期四";
+        } else if (week == 5) {
+            str = "星期五";
+        } else if (week == 6) {
+            str = "星期六";
+        }
+        return str;
+    }
+
+    /**
+     * 两个时间之间的天数
+     */
+    public static long getDays(String date1, String date2, String type) {
+        if (date1 == null || date1.equals("")) {
+            return 0;
+        }
+        if (date2 == null || date2.equals("")) {
+            return 0;
+        }
+        // 转换为标准时间
+        SimpleDateFormat myFormatter = new SimpleDateFormat(type);
+        java.util.Date   date        = null;
+        java.util.Date   mydate      = null;
+        try {
+            date = myFormatter.parse(date1);
+            mydate = myFormatter.parse(date2);
+        } catch (Exception e) {
+        }
+        long day = (date.getTime() - mydate.getTime()) / (24 * 60 * 60 * 1000);
+        return day;
     }
 }
