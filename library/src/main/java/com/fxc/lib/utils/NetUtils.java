@@ -1,4 +1,4 @@
-﻿package com.fxc.lib.utils;
+package com.fxc.lib.utils;
 
 import android.app.Activity;
 import android.content.ComponentName;

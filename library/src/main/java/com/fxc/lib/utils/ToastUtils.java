@@ -1,4 +1,4 @@
-﻿package com.fxc.lib.utils;
+package com.fxc.lib.utils;
 
 import android.content.Context;
 import android.widget.Toast;

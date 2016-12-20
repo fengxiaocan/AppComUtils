@@ -56,8 +56,8 @@ public class ScreentShotUtil {
     }
 
     private Bitmap screenShot(int width, int height) {
-        Class<?> surfaceClass ;
-        Method   method       ;
+        Class<?> surfaceClass;
+        Method   method;
         try {
             if (android.os.Build.VERSION.SDK_INT >=
                 android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
@@ -76,10 +76,12 @@ public class ScreentShotUtil {
     }
 
     private class ScreenRunnable implements Runnable {
-        private String filePath;
+        private String  filePath;
+        private Context mContext;
 
-        public ScreenRunnable(String filePath) {
+        public ScreenRunnable(String filePath, Context context) {
             this.filePath = filePath;
+            mContext = context;
         }
 
         @Override
@@ -104,7 +106,7 @@ public class ScreentShotUtil {
             } else {
                 if (Build.VERSION.SDK_INT >=
                     Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    wm = (WindowManager) MainUtils.getContext().getSystemService(Context.WINDOW_SERVICE);
+                    wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
                     mDisplay = wm.getDefaultDisplay();
                     mDisplayMatrix = new Matrix();
                     mDisplayMetrics = new DisplayMetrics();
@@ -141,7 +143,7 @@ public class ScreentShotUtil {
                     if (mScreenBitmap == null) {
                         Log.e("screen", "截屏失败");
                     }
-                   mScreenBitmap.setHasAlpha(false);
+                    mScreenBitmap.setHasAlpha(false);
                     mScreenBitmap.prepareToDraw();
 
                     saveBitmap2File(mScreenBitmap, filePath);
@@ -154,8 +156,8 @@ public class ScreentShotUtil {
      * Takes a screenshot of the current display and shows an animation.
      */
     @SuppressLint("NewApi")
-    public void takeScreenshot(String fileFullPath) {
-        new Thread(new ScreenRunnable(fileFullPath)).start();
+    public void takeScreenshot(Context context, String fileFullPath) {
+        new Thread(new ScreenRunnable(fileFullPath, context)).start();
     }
 
     /**
@@ -172,7 +174,7 @@ public class ScreentShotUtil {
         } catch (Exception e) {
             TestUtils.log(e.getMessage());
         } finally {
-            IOUtils.close(bos);
+            FileUtils.close(bos);
             if (!bm.isRecycled()) {
                 bm.recycle();
             }

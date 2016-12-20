@@ -1,4 +1,4 @@
-﻿package com.fxc.lib.utils;
+package com.fxc.lib.utils;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,7 +7,9 @@ import android.widget.EditText;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
-//打开或关闭软键盘
+/**
+ * 打开或关闭软键盘
+ */
 public class KeyBoardUtils {
 
     /**
@@ -24,7 +26,7 @@ public class KeyBoardUtils {
      * @param mContext  上下文
      */
     public static void openKeybord(EditText mEditText, Context mContext) {
-        InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) mContext.getSystemService(INPUT_METHOD_SERVICE);
         imm.showSoftInput(mEditText, InputMethodManager.RESULT_SHOWN);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
     }
@@ -36,7 +38,7 @@ public class KeyBoardUtils {
      * @param mContext  上下文
      */
     public static void closeKeybord(EditText mEditText, Context mContext) {
-        InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) mContext.getSystemService(INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mEditText.getWindowToken(), 0);
     }
 }
