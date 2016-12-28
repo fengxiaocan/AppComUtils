@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.WindowManager;
@@ -251,5 +253,29 @@ public class AppUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 打开本应用的设置界面
+     * @param context
+     */
+    public static void openSettingActivity(Context context) {
+        Intent intent = new Intent();
+        intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts("package", context.getPackageName(), null);
+        intent.setData(uri);
+        context.startActivity(intent);
+    }
+
+    /**
+     * 根据包名打开应用的设置界面
+     * @param context
+     */
+    public static void openSettingActivity(Context context,String packageName) {
+        Intent intent = new Intent();
+        intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts("package", packageName, null);
+        intent.setData(uri);
+        context.startActivity(intent);
     }
 }
