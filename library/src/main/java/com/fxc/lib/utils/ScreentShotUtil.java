@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.os.Build;
-import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -91,8 +90,8 @@ public class ScreentShotUtil {
                 String fileName =
                         format.format(new Date(System.currentTimeMillis())) +
                         ".png";
-                if (sdCardExist()) {
-                    filePath = new File(getSdRoot(), fileName).getAbsolutePath();
+                if (SDCardUtils.sdCardExist()) {
+                    filePath = new File(SDCardUtils.getSdRoot(), fileName).getAbsolutePath();
                 }
             }
 
@@ -194,22 +193,5 @@ public class ScreentShotUtil {
                 return 360f - 270f;
         }
         return 0f;
-    }
-
-    /**
-     * 判断sd卡是否存在
-     */
-    public static boolean sdCardExist() {
-        return Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED); //判断sd卡是否存在
-    }
-
-    /**
-     * 获取sd卡更目录
-     *
-     * @return
-     */
-    public static File getSdRoot() {
-        File sdDir = Environment.getExternalStorageDirectory();//获取根目录
-        return sdDir;
     }
 }

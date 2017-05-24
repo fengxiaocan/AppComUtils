@@ -19,16 +19,13 @@ import java.util.Comparator;
 import java.util.List;
 
 /*
- *  @项目名：
- *  @文件名:   StringUtils
- *  @创建者:   Administrator
  *  @创建时间:  2016/9/6 14:07
  *  @描述：    字符串操作工具类
  */
 public class StringUtils {
 
     /** 判断字符串是否为空 */
-    public static boolean isEmpty(String str) {
+    public static boolean isEmpty(Object str) {
         if (str == null) {
             return true;
         }
@@ -429,5 +426,25 @@ public class StringUtils {
 
             return formatTime;
         }
+    }
+
+    /**
+     * 检测手机号码
+     * @param phone
+     */
+    public static boolean checkoutPhone(String phone){
+        if (isEmpty(phone)){
+            return false;
+        }
+        if (phone.length() < 11){
+            return false;
+        }
+        if (!phone.startsWith("1")){
+            return false;
+        }
+        if (phone.startsWith("10") || phone.startsWith("11") || phone.startsWith("12")){
+            return false;
+        }
+        return true;
     }
 }

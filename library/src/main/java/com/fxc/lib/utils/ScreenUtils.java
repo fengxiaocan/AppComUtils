@@ -87,7 +87,5 @@ public class ScreenUtils {
                 height - statusBarHeight);
         view.destroyDrawingCache();
         return bp;
-
     }
-
 }

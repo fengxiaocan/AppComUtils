@@ -89,7 +89,22 @@ public class TimeUtils {
      * 格式:16-08-20
      */
     public static final String DATE_TYPE18 = "yy-MM-dd";
-
+    /**
+     * 格式:2016-08-20 11:11:11
+     */
+    public static final String DATE_TYPE19 = "yyyy-MM-dd HH:mm:ss";
+    /**
+     * 格式:20160820-11:11:11
+     */
+    public static final String DATE_TYPE20 = "yyyyMMdd-HH:mm:ss";
+    /**
+     * 格式:20160820111111
+     */
+    public static final String DATE_TYPE21 = "yyyyMMddHHmmss";
+    /**
+     * 格式:2016_08_20_11:11:11
+     */
+    public static final String DATE_TYPE22 = "yyyy_MM_dd_HH:mm:ss";
     /**
      * 获取当前时间
      *
