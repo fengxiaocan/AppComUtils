@@ -5,7 +5,7 @@ import android.view.KeyEvent;
 import android.view.View;
 
 import com.fxc.lib.intface.MethodCallback;
-import com.fxc.lib.utils.KeyBoardUtils;
+import com.fxc.lib.util.KeyboardUtils;
 
 /**
  *  @项目名： yuanyang
@@ -29,7 +29,7 @@ public class OnKeyListenerAdapter
     public boolean onKey(View v, int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_ENTER) {
             // 先隐藏键盘
-            KeyBoardUtils.hideSoftInput(mContext);
+            KeyboardUtils.hideSoftInput(mContext,v);
             //进行搜索操作的方法，在该方法中可以加入mEditSearchUser的非空判断
             mMethodCallback.method();
         }
