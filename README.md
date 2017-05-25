@@ -1,8 +1,28 @@
+
+
+Step 1.Add it in your root build.gradle at the end of repositories:
+
+	allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
+Copy
+
+Step 2. Add the dependency
+
+	dependencies {
+	        compile 'com.github.fengxiaocan:AppComUtils:v1.0.2'
+	}
+
+
+
 # AppComUtils
-Android app项目使用到的工具类,以后会慢慢添加
-添加权限申请管理工具
-使用方法:在Activity/Fragment实现ActivityCompat.OnRequestPermissionsResultCallback和EasyPermissions.PermissionCallbacks接口
-实现接口的方法:
+Android app项目使用到的工具类,以后会慢慢添加<br/>
+添加权限申请管理工具<br/>
+使用方法:在Activity/Fragment实现ActivityCompat.OnRequestPermissionsResultCallback和EasyPermissions.PermissionCallbacks接口<br/>
+实现接口的方法:<br/>
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -29,7 +49,8 @@ Android app项目使用到的工具类,以后会慢慢添加
     }
 
 
-创建申请权限的方法:
+创建申请权限的方法:<br/>
+
     @AfterPermissionGranted(CAMERA_AND_READ_AND_WIRTE)
     private void requestPermissionToCamera() {
         String[] perms = {Manifest.permission.CAMERA,
@@ -43,15 +64,11 @@ Android app项目使用到的工具类,以后会慢慢添加
             //进入到这里代表没有权限.
         }
     }
-然后调用该方法就可以了.
-EmailUtils:邮件发送工具,但是要确保邮箱的IMAP功能开启,一般只能使用授权码登录
-ApkUtils:apk操作工具,可以实现静默安装与卸载(需要root)
-AppUtils:app工具,聚集了所有的与app相关的方法
+
+然后调用该方法就可以了.<br/>
+ApkUtils:apk操作工具,可以实现静默安装与卸载(需要root)<br/>
+AppUtils:app工具,聚集了所有的与app相关的方法<br/>
 
 混淆须知
 
--keep class com.sun.mail.** {*;}
--keep class javax.mail.** {*;}
--keep class com.fxc.lib.utils.** {*;}
--keep class com.sun.activation.registries.** {*;}
--keep class javax.activation.** {*;}
+    -keep class com.fxc.lib.utils.** {*;}
