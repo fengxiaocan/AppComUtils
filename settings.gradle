@@ -1,1 +1,1 @@
-include ':library', ':emaillibs'
+include ':library'
