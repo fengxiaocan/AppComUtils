@@ -40,7 +40,6 @@ public final class StringUtils {
      * 判断字符串是否为null或长度为0
      *
      * @param s 待校验字符串
-     *
      * @return {@code true}: 空<br> {@code false}: 不为空
      */
     public static boolean isEmpty(CharSequence s) {
@@ -51,7 +50,6 @@ public final class StringUtils {
      * 判断字符串是否为null或全为空格
      *
      * @param s 待校验字符串
-     *
      * @return {@code true}: null或全空格<br> {@code false}: 不为null且不全空格
      */
     public static boolean isTrimEmpty(String s) {
@@ -62,7 +60,6 @@ public final class StringUtils {
      * 判断字符串是否为null或全为空白字符
      *
      * @param s 待校验字符串
-     *
      * @return {@code true}: null或全空白字符<br> {@code false}: 不为null且不全空白字符
      */
     public static boolean isSpace(String s) {
@@ -82,7 +79,6 @@ public final class StringUtils {
      *
      * @param a 待校验字符串a
      * @param b 待校验字符串b
-     *
      * @return {@code true}: 相等<br>{@code false}: 不相等
      */
     public static boolean equals(CharSequence a, CharSequence b) {
@@ -110,7 +106,6 @@ public final class StringUtils {
      *
      * @param a 待校验字符串a
      * @param b 待校验字符串b
-     *
      * @return {@code true}: 相等<br>{@code false}: 不相等
      */
     public static boolean equalsIgnoreCase(String a, String b) {
@@ -121,7 +116,6 @@ public final class StringUtils {
      * null转为长度为0的字符串
      *
      * @param s 待转字符串
-     *
      * @return s为null转为长度为0字符串，否则不改变
      */
     public static String noNull(String s) {
@@ -132,7 +126,6 @@ public final class StringUtils {
      * 返回字符串长度
      *
      * @param s 字符串
-     *
      * @return null返回0，其他返回自身长度
      */
     public static int length(CharSequence s) {
@@ -143,7 +136,6 @@ public final class StringUtils {
      * 首字母大写
      *
      * @param s 待转字符串
-     *
      * @return 首字母大写字符串
      */
     public static String upperFirstLetter(String s) {
@@ -158,7 +150,6 @@ public final class StringUtils {
      * 所有字母转为大写
      *
      * @param character 待转字符串
-     *
      * @return 大写字符串
      */
     public static CharSequence toUpperCase(CharSequence character) {
@@ -176,7 +167,6 @@ public final class StringUtils {
      * 所有字母转为小写
      *
      * @param character 待转字符串
-     *
      * @return 小写字符串
      */
     public static CharSequence toLowerCase(CharSequence character) {
@@ -195,7 +185,6 @@ public final class StringUtils {
      * 首字母小写
      *
      * @param s 待转字符串
-     *
      * @return 首字母小写字符串
      */
     public static String lowerFirstLetter(String s) {
@@ -209,7 +198,6 @@ public final class StringUtils {
      * 反转字符串
      *
      * @param s 待反转字符串
-     *
      * @return 反转字符串
      */
     public static String reverse(String s) {
@@ -217,9 +205,9 @@ public final class StringUtils {
         if (len <= 1) {
             return s;
         }
-        int    mid   = len >> 1;
+        int mid = len >> 1;
         char[] chars = s.toCharArray();
-        char   c;
+        char c;
         for (int i = 0; i < mid; ++i) {
             c = chars[i];
             chars[i] = chars[len - i - 1];
@@ -232,7 +220,6 @@ public final class StringUtils {
      * 转化为半角字符
      *
      * @param s 待转字符串
-     *
      * @return 半角字符串
      */
     public static String toDBC(String s) {
@@ -256,7 +243,6 @@ public final class StringUtils {
      * 转化为全角字符
      *
      * @param s 待转字符串
-     *
      * @return 全角字符串
      */
     public static String toSBC(String s) {
@@ -276,7 +262,9 @@ public final class StringUtils {
         return new String(chars);
     }
 
-    /** 判断多个字符串是否相等，如果其中有一个为空字符串或者null，则返回false，只有全相等才返回true */
+    /**
+     * 判断多个字符串是否相等，如果其中有一个为空字符串或者null，则返回false，只有全相等才返回true
+     */
     public static boolean isEquals(String... agrs) {
         String last = null;
         for (int i = 0; i < agrs.length; i++) {
@@ -297,8 +285,8 @@ public final class StringUtils {
      */
     public static String convertStreamToString(InputStream is) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        StringBuilder  sb     = new StringBuilder();
-        String         line   = null;
+        StringBuilder sb = new StringBuilder();
+        String line = null;
 
         try {
             while ((line = reader.readLine()) != null) {
@@ -316,7 +304,9 @@ public final class StringUtils {
         return sb.toString();
     }
 
-    /** 使用字符缓冲区来拼接字符串 */
+    /**
+     * 使用字符缓冲区来拼接字符串
+     */
     public static String join(String... s) {
         StringBuffer sb = new StringBuffer();
         for (String s1 : s) {
@@ -364,18 +354,18 @@ public final class StringUtils {
             in.read(first3bytes);//找到文档的前三个字节并自动判断文档类型。
             in.reset();
             if (first3bytes[0] == (byte) 0xEF &&
-                first3bytes[1] == (byte) 0xBB &&
-                first3bytes[2] == (byte) 0xBF) {// utf-8
+                    first3bytes[1] == (byte) 0xBB &&
+                    first3bytes[2] == (byte) 0xBF) {// utf-8
 
                 text = "utf-8";
             } else if (first3bytes[0] == (byte) 0xFF &&
-                       first3bytes[1] == (byte) 0xFE) {
+                    first3bytes[1] == (byte) 0xFE) {
                 text = "unicode";
             } else if (first3bytes[0] == (byte) 0xFE &&
-                       first3bytes[1] == (byte) 0xFF) {
+                    first3bytes[1] == (byte) 0xFF) {
                 text = "utf-16be";
             } else if (first3bytes[0] == (byte) 0xFF &&
-                       first3bytes[1] == (byte) 0xFF) {
+                    first3bytes[1] == (byte) 0xFF) {
                 text = "utf-16le";
             } else {
                 text = "GBK";
@@ -444,7 +434,7 @@ public final class StringUtils {
         if (isEmpty(url)) {
             return "";
         } else {
-            int    of  = url.lastIndexOf('.');
+            int of = url.lastIndexOf('.');
             String fix = url.substring(of, url.length());
             return fix;
         }
@@ -457,7 +447,7 @@ public final class StringUtils {
         if (isEmpty(url)) {
             return "";
         } else {
-            int    of  = url.lastIndexOf('/');
+            int of = url.lastIndexOf('/');
             String fix = url.substring(of, url.length());
             return fix;
         }
@@ -478,7 +468,6 @@ public final class StringUtils {
      *
      * @param code 要加密的信息
      * @param seed 加密的密码
-     *
      * @return 还原后的信息
      */
     public static String encode(String code, int seed) {
@@ -496,7 +485,6 @@ public final class StringUtils {
      *
      * @param code 要加密的信息
      * @param seed 解密的密码
-     *
      * @return 还原后的信息
      */
     public static String decode(String code, int seed) {
@@ -511,7 +499,6 @@ public final class StringUtils {
      * @param color   高亮颜色
      * @param start   起始位置
      * @param end     结束位置
-     *
      * @return 高亮spannable
      */
     public static CharSequence getHighLightText(String content, int color, int start, int end) {
@@ -521,7 +508,7 @@ public final class StringUtils {
         start = start >= 0 ? start : 0;
         end = end <= content.length() ? end : content.length();
         SpannableString spannable = new SpannableString(content);
-        CharacterStyle  span      = new ForegroundColorSpan(color);
+        CharacterStyle span = new ForegroundColorSpan(color);
         spannable.setSpan(span, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         return spannable;
     }
@@ -530,7 +517,6 @@ public final class StringUtils {
      * 获取链接样式的字符串，即字符串下面有下划线
      *
      * @param txt 文本
-     *
      * @return 返回链接样式的字符串
      */
     public static Spanned getHtmlStyleString(String txt) {
@@ -543,7 +529,6 @@ public final class StringUtils {
      * 格式化文件大小，不保留末尾的0
      *
      * @param len 大小
-     *
      * @return
      */
     public static String formatFileSize(long len) {
@@ -555,11 +540,10 @@ public final class StringUtils {
      *
      * @param len      大小
      * @param keepZero 是否保留小数点
-     *
      * @return
      */
     public static String formatFileSize(long len, boolean keepZero) {
-        String        size;
+        String size;
         DecimalFormat formatKeepTwoZero = new DecimalFormat("#.00");
         DecimalFormat formatKeepOneZero = new DecimalFormat("#.0");
         if (len < 1024) {
@@ -580,7 +564,7 @@ public final class StringUtils {
                         len * 100 / 1024 / 1024 / (float) 100)) + "MB";
             } else {
                 size = String.valueOf(len * 100 / 1024 / 1024 / (float) 100) +
-                       "MB";
+                        "MB";
             }
         } else if (len < 100 * 1024 * 1024) {
             // [10MB, 100MB)，保留一位小数
@@ -589,7 +573,7 @@ public final class StringUtils {
                         len * 10 / 1024 / 1024 / (float) 10)) + "MB";
             } else {
                 size = String.valueOf(len * 10 / 1024 / 1024 / (float) 10) +
-                       "MB";
+                        "MB";
             }
         } else if (len < 1024 * 1024 * 1024) {
             // [100MB, 1GB)，个位四舍五入
@@ -607,13 +591,12 @@ public final class StringUtils {
      *
      * @param num      double值
      * @param decimals 保留几位小数
-     *
      * @return 保留后的字符串
      */
     public static String getDoubleTwoDecimals(double num, int decimals) {
         String numStr = String.valueOf(num);
-        int    last   = numStr.lastIndexOf("\\.");
-        int    i      = last + decimals;
+        int last = numStr.lastIndexOf("\\.");
+        int i = last + decimals;
         if (i < numStr.length()) {
             numStr.substring(0, i);
         } else if (i == numStr.length()) {
@@ -631,7 +614,6 @@ public final class StringUtils {
      * 格式化音乐时间: 120 000 --> 02:00
      *
      * @param time
-     *
      * @return
      */
     public static String formatMusicTime(long time) {
@@ -677,12 +659,24 @@ public final class StringUtils {
             return false;
         }
         if (phone.startsWith("10") || phone.startsWith("11") ||
-            phone.startsWith("12")) {
+                phone.startsWith("12")) {
             return false;
         }
         return true;
     }
 
+    private final static Pattern emailer = Pattern.compile("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*");
+
+    /**
+     * 检测是否是邮箱
+     *
+     * @param email
+     */
+    public static boolean checkoutEmail(String email) {
+        if (isEmpty(email))
+            return false;
+        return emailer.matcher(email).matches();
+    }
 
 
     /**
