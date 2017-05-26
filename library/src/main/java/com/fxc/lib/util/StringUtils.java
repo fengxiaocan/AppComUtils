@@ -20,6 +20,9 @@ import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * <pre>
@@ -121,7 +124,7 @@ public final class StringUtils {
      *
      * @return s为null转为长度为0字符串，否则不改变
      */
-    public static String null2Length0(String s) {
+    public static String noNull(String s) {
         return s == null ? "" : s;
     }
 
@@ -678,5 +681,122 @@ public final class StringUtils {
             return false;
         }
         return true;
+    }
+
+
+
+    /**
+     * 字符串转整数
+     *
+     * @param str
+     * @param defValue
+     * @return
+     */
+    public static int toInt(String str, int defValue) {
+        try {
+            return Integer.parseInt(str);
+        } catch (Exception e) {
+            return defValue;
+        }
+    }
+
+    /**
+     * 对象转整
+     *
+     * @param obj
+     * @return 转换异常返回 0
+     */
+    public static int toInt(Object obj) {
+        if (obj == null)
+            return 0;
+        return toInt(obj.toString(), 0);
+    }
+
+    /**
+     * String转long
+     *
+     * @param obj
+     * @return 转换异常返回 0
+     */
+    public static long toLong(String obj) {
+        try {
+            return Long.parseLong(obj);
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
+    /**
+     * String转double
+     *
+     * @param obj
+     * @return 转换异常返回 0
+     */
+    public static double toDouble(String obj) {
+        try {
+            return Double.parseDouble(obj);
+        } catch (Exception e) {
+            return 0D;
+        }
+    }
+
+    /**
+     * 字符串转布尔
+     *
+     * @param b
+     * @return 转换异常返回 false
+     */
+    public static boolean toBoolean(String b) {
+        try {
+            return Boolean.parseBoolean(b);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     * 判断一个字符串是不是数字
+     */
+    public static boolean isNumber(CharSequence str) {
+        Pattern pattern = Pattern.compile("-?[0-9]+.?[0-9]+");
+        Matcher isNum = pattern.matcher(str);
+        if (!isNum.matches()) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * byte[]数组转换为16进制的字符串。
+     *
+     * @param data 要转换的字节数组。
+     * @return 转换后的结果。
+     */
+    public static String byteArrayToHexString(byte[] data) {
+        StringBuilder sb = new StringBuilder(data.length * 2);
+        for (byte b : data) {
+            int v = b & 0xff;
+            if (v < 16) {
+                sb.append('0');
+            }
+            sb.append(Integer.toHexString(v));
+        }
+        return sb.toString().toUpperCase(Locale.getDefault());
+    }
+
+    /**
+     * 16进制表示的字符串转换为字节数组。
+     *
+     * @param s 16进制表示的字符串
+     * @return byte[] 字节数组
+     */
+    public static byte[] hexStringToByteArray(String s) {
+        int len = s.length();
+        byte[] d = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            // 两位一组，表示一个字节,把这样表示的16进制字符串，还原成一个进制字节
+            d[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4) + Character.digit(s.charAt(i + 1), 16));
+        }
+        return d;
     }
 }
