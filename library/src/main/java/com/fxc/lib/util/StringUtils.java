@@ -23,8 +23,6 @@ import java.util.List;
 
 /**
  * <pre>
- *
- *
  *     time  : 2016/08/16
  *     desc  : 字符串相关工具类
  * </pre>
@@ -39,6 +37,7 @@ public final class StringUtils {
      * 判断字符串是否为null或长度为0
      *
      * @param s 待校验字符串
+     *
      * @return {@code true}: 空<br> {@code false}: 不为空
      */
     public static boolean isEmpty(CharSequence s) {
@@ -49,6 +48,7 @@ public final class StringUtils {
      * 判断字符串是否为null或全为空格
      *
      * @param s 待校验字符串
+     *
      * @return {@code true}: null或全空格<br> {@code false}: 不为null且不全空格
      */
     public static boolean isTrimEmpty(String s) {
@@ -59,10 +59,13 @@ public final class StringUtils {
      * 判断字符串是否为null或全为空白字符
      *
      * @param s 待校验字符串
+     *
      * @return {@code true}: null或全空白字符<br> {@code false}: 不为null且不全空白字符
      */
     public static boolean isSpace(String s) {
-        if (s == null) return true;
+        if (s == null) {
+            return true;
+        }
         for (int i = 0, len = s.length(); i < len; ++i) {
             if (!Character.isWhitespace(s.charAt(i))) {
                 return false;
@@ -76,17 +79,22 @@ public final class StringUtils {
      *
      * @param a 待校验字符串a
      * @param b 待校验字符串b
+     *
      * @return {@code true}: 相等<br>{@code false}: 不相等
      */
     public static boolean equals(CharSequence a, CharSequence b) {
-        if (a == b) return true;
+        if (a == b) {
+            return true;
+        }
         int length;
         if (a != null && b != null && (length = a.length()) == b.length()) {
             if (a instanceof String && b instanceof String) {
                 return a.equals(b);
             } else {
                 for (int i = 0; i < length; i++) {
-                    if (a.charAt(i) != b.charAt(i)) return false;
+                    if (a.charAt(i) != b.charAt(i)) {
+                        return false;
+                    }
                 }
                 return true;
             }
@@ -99,6 +107,7 @@ public final class StringUtils {
      *
      * @param a 待校验字符串a
      * @param b 待校验字符串b
+     *
      * @return {@code true}: 相等<br>{@code false}: 不相等
      */
     public static boolean equalsIgnoreCase(String a, String b) {
@@ -109,6 +118,7 @@ public final class StringUtils {
      * null转为长度为0的字符串
      *
      * @param s 待转字符串
+     *
      * @return s为null转为长度为0字符串，否则不改变
      */
     public static String null2Length0(String s) {
@@ -119,6 +129,7 @@ public final class StringUtils {
      * 返回字符串长度
      *
      * @param s 字符串
+     *
      * @return null返回0，其他返回自身长度
      */
     public static int length(CharSequence s) {
@@ -129,21 +140,65 @@ public final class StringUtils {
      * 首字母大写
      *
      * @param s 待转字符串
+     *
      * @return 首字母大写字符串
      */
     public static String upperFirstLetter(String s) {
-        if (isEmpty(s) || !Character.isLowerCase(s.charAt(0))) return s;
+        if (isEmpty(s) || !Character.isLowerCase(s.charAt(0))) {
+            return s;
+        }
         return String.valueOf((char) (s.charAt(0) - 32)) + s.substring(1);
     }
+
+
+    /**
+     * 所有字母转为大写
+     *
+     * @param character 待转字符串
+     *
+     * @return 大写字符串
+     */
+    public static CharSequence toUpperCase(CharSequence character) {
+        if (character == null || character.equals("")) {
+            return character;
+        }
+        StringBuffer buffer = new StringBuffer();
+        for (int i = 0; i < character.length(); i++) {
+            buffer.append(Character.toUpperCase(character.charAt(i)));
+        }
+        return buffer.toString();
+    }
+
+    /**
+     * 所有字母转为小写
+     *
+     * @param character 待转字符串
+     *
+     * @return 小写字符串
+     */
+    public static CharSequence toLowerCase(CharSequence character) {
+        if (character == null || character.equals("")) {
+            return character;
+        }
+        StringBuffer buffer = new StringBuffer();
+        for (int i = 0; i < character.length(); i++) {
+            buffer.append(Character.toLowerCase(character.charAt(i)));
+        }
+        return buffer.toString();
+    }
+
 
     /**
      * 首字母小写
      *
      * @param s 待转字符串
+     *
      * @return 首字母小写字符串
      */
     public static String lowerFirstLetter(String s) {
-        if (isEmpty(s) || !Character.isUpperCase(s.charAt(0))) return s;
+        if (isEmpty(s) || !Character.isUpperCase(s.charAt(0))) {
+            return s;
+        }
         return String.valueOf((char) (s.charAt(0) + 32)) + s.substring(1);
     }
 
@@ -151,14 +206,17 @@ public final class StringUtils {
      * 反转字符串
      *
      * @param s 待反转字符串
+     *
      * @return 反转字符串
      */
     public static String reverse(String s) {
         int len = length(s);
-        if (len <= 1) return s;
-        int mid = len >> 1;
+        if (len <= 1) {
+            return s;
+        }
+        int    mid   = len >> 1;
         char[] chars = s.toCharArray();
-        char c;
+        char   c;
         for (int i = 0; i < mid; ++i) {
             c = chars[i];
             chars[i] = chars[len - i - 1];
@@ -171,10 +229,13 @@ public final class StringUtils {
      * 转化为半角字符
      *
      * @param s 待转字符串
+     *
      * @return 半角字符串
      */
     public static String toDBC(String s) {
-        if (isEmpty(s)) return s;
+        if (isEmpty(s)) {
+            return s;
+        }
         char[] chars = s.toCharArray();
         for (int i = 0, len = chars.length; i < len; i++) {
             if (chars[i] == 12288) {
@@ -192,10 +253,13 @@ public final class StringUtils {
      * 转化为全角字符
      *
      * @param s 待转字符串
+     *
      * @return 全角字符串
      */
     public static String toSBC(String s) {
-        if (isEmpty(s)) return s;
+        if (isEmpty(s)) {
+            return s;
+        }
         char[] chars = s.toCharArray();
         for (int i = 0, len = chars.length; i < len; i++) {
             if (chars[i] == ' ') {
@@ -406,7 +470,6 @@ public final class StringUtils {
     }
 
 
-
     /**
      * 把字符串加密
      *
@@ -597,19 +660,21 @@ public final class StringUtils {
 
     /**
      * 检测手机号码
+     *
      * @param phone
      */
-    public static boolean checkoutPhone(String phone){
-        if (isEmpty(phone)){
+    public static boolean checkoutPhone(String phone) {
+        if (isEmpty(phone)) {
             return false;
         }
-        if (phone.length() < 11){
+        if (phone.length() < 11) {
             return false;
         }
-        if (!phone.startsWith("1")){
+        if (!phone.startsWith("1")) {
             return false;
         }
-        if (phone.startsWith("10") || phone.startsWith("11") || phone.startsWith("12")){
+        if (phone.startsWith("10") || phone.startsWith("11") ||
+            phone.startsWith("12")) {
             return false;
         }
         return true;

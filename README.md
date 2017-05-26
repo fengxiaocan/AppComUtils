@@ -13,7 +13,7 @@ Copy
 Step 2. Add the dependency
 
 	dependencies {
-	        compile 'com.github.fengxiaocan:AppComUtils:v1.0.2'
+	        compile 'com.github.fengxiaocan:AppComUtils:v1.0.3'
 	}
 
 
