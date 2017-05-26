@@ -8,6 +8,7 @@ import android.content.SharedPreferences.Editor;
  * sharedPreferences快速保存数据/获取数据
  */
 public class SpUtils {
+
     private static SharedPreferences sp;
     private static SpUtils sSpUtils;
     private static String sName;
@@ -15,7 +16,7 @@ public class SpUtils {
     private SpUtils() {
     }
 
-    public static SpUtils create(String name){
+    public static SpUtils create(String name) {
         sName = name;
         synchronized (SpUtils.class) {
             if (sSpUtils == null) {
@@ -27,7 +28,7 @@ public class SpUtils {
         return sSpUtils;
     }
 
-    private static SharedPreferences getSharedP() {
+    private SharedPreferences getSharedP() {
         if (sp == null) {
             sp = Utils.getContext().getSharedPreferences(sName, Context.MODE_PRIVATE);
         }
@@ -37,13 +38,13 @@ public class SpUtils {
     /**
      * 保存各种类型的信息
      */
-    public static void save(Object ... list) {
+    public void save(Object... list) {
         if (list == null)
             return;
         sp = getSharedP();
         // 获取编辑器
         Editor edit = sp.edit();
-        for (int i = 0; i < list.length; i+=2) {
+        for (int i = 0; i < list.length; i += 2) {
             String key = (String) list[i];
             Object object = list[i + 1];
             if (object instanceof String) {
@@ -68,7 +69,7 @@ public class SpUtils {
     /**
      * 保存String类型的信息
      */
-    public static void save(String key, String value) {
+    public void save(String key, String value) {
         sp = getSharedP();
         // 获取编辑器
         Editor edit = sp.edit();
@@ -76,22 +77,21 @@ public class SpUtils {
         edit.putString(key, value);
         // 提交数据
         edit.commit();
-
         sp = null;
     }
 
     /**
      * 保存String类型的信息
      */
-    public static void save(String ... list) {
+    public void save(String... list) {
         if (list == null)
             return;
         sp = getSharedP();
         // 获取编辑器
         Editor edit = sp.edit();
-        for (int i = 0; i < list.length; i+=2) {
+        for (int i = 0; i < list.length; i += 2) {
             // 写入数据
-            edit.putString(list[i], list[i+1]);
+            edit.putString(list[i], list[i + 1]);
         }
         // 提交数据
         edit.commit();
@@ -102,19 +102,17 @@ public class SpUtils {
     /**
      * 获取String类型的数据信息
      */
-    public static String getInfo(String key,
-                                 String defValue) {
+    public String getInfo(String key,
+                          String defValue) {
         sp = getSharedP();
-
         String value = sp.getString(key, defValue);
-
         return value;
     }
 
     /**
      * 保存boolean类型的置
      */
-    public static void save(String key, boolean value) {
+    public void save(String key, boolean value) {
         sp = getSharedP();
         // 获取编辑器
         Editor edit = sp.edit();
@@ -129,18 +127,16 @@ public class SpUtils {
     /**
      * 获取boolean的值
      */
-    public static boolean getInfo(String key, boolean defValue) {
+    public boolean getInfo(String key, boolean defValue) {
         sp = getSharedP();
-
         boolean value = sp.getBoolean(key, defValue);
-
         return value;
     }
 
     /**
      * 获取int类型的值
      */
-    public static void save(String key, int value) {
+    public void save(String key, int value) {
         sp = getSharedP();
         // 获取编辑器
         Editor edit = sp.edit();
@@ -148,18 +144,15 @@ public class SpUtils {
         edit.putInt(key, value);
         // 提交数据
         edit.commit();
-
         sp = null;
     }
 
     /**
      * 获取int类型的值
      */
-    public static int getInfo(String key, int defValue) {
+    public int getInfo(String key, int defValue) {
         sp = getSharedP();
-
         int value = sp.getInt(key, defValue);
-
         return value;
     }
 }
